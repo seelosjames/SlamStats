@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>64 Team Bracket</title>
+    <style>
+        /* Add your CSS styling here */
+        /* For example: */
+        text {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        fill: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="bracket"></div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+
+        // set the dimensions and margins of the graph
+        var margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = 3000 - margin.left - margin.right,
+            height = 1500 - margin.top - margin.bottom;
+
+
+
+        d3.csv("2010-2011.csv").then(function(data) {
+            var teams = [];
+
+            data.forEach(function(matchup) {
+                teams.push({"team": matchup.team_1, "seed": matchup.seed_1})
+                teams.push({"team": matchup.team_2, "seed": matchup.seed_2})
+            })
+
+            update(data, teams);
+        });
+
+        function update(data, teams) {
+            
+            console.log(teams);
+
+            var svg = d3.select("#bracket").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+            // .append('g')
+            //     .attr("class", "bracket");
+
+
+            var matchupGroups = svg.selectAll("g")
+                .data(teams.slice(8))
+                .enter()
+                .append("g")
+                .attr("transform", function(d, i) {
+                    // Adjust the spacing between matchups
+                    return "translate(0," + i * 50 + ")";
+                });
+
+            matchupGroups.append("path")
+                .attr("d", function(d, i) {
+                    // Your path generation code here, based on matchup data
+                    // For example, a simple horizontal line
+                    return "M10,20L200,20";
+                })
+                .attr("stroke", "black")
+                .attr("stroke-width", 2);
+
+            matchupGroups.append("text")
+                .attr("x", 10) // Adjust the x-coordinate as needed
+                .attr("y", 20) // Adjust the y-coordinate as needed
+                .text(function(d) {
+                    // Display team names based on matchup data
+                    return d.team1 + " vs " + d.team2;
+                });
+
+            
+            // // bracket
+            // d3.select('.bracket')
+            //     .selectAll('bracket')
+            //     .data(teams.slice(8))
+            //     .join('path')
+            //     .attr('d', function(d, i) { return getBracketSpecs(i); })
+            //     .attr("fill", "white")
+            //     .attr("stroke", "black")
+            //     .on("click", function() {
+            //         d3.select(this).style("fill", "blue")
+            //     })
+            //     // .attr("class", "matchup")
+
+            // d3.select('.matchup')
+            //     .selectAll('circle')
+            //     .data(teams.slice(8))
+            //     .join('text')
+            //     .attr("x", function(d, i) { return i * 10 })
+            //     .attr("y", function(d, i) { return i * 10 })
+            //     .text(function(d, i) { return d.team })
+        }
+
+        function getBracketSpecs(i) {
+            var w = 100;
+            var h = 20;
+            var r = 10;
+            var tl = i % 2 == 0 ? true : false;
+            var tr = i % 2 == 0 ? true : false;
+            var bl = i % 2 == 1 ? true : false;
+            var br = i % 2 == 1 ? true : false;
+
+            if (i >= 0 && i <= 31) {
+                return rounded_rect(20, i % 2 == 1 ? (i * 30) - 10 : (i * 30), w, h, r, tl, tr, bl, br);
+            } else if (i >= 32 && i <= 63) {
+                i = i - 32
+                return rounded_rect(1220, i % 2 == 1 ? (i * 30) - 10 : (i * 30), w, h, r, tl, tr, bl, br);
+            } else if (i >= 64 && i <= 79) {
+                i = i - 64
+                return rounded_rect(140, (i % 2 == 1 ? (i * 60) - 40 : (i * 60)) + 30, w, h, r, tl, tr, bl, br);
+            } else if (i >= 80 && i <= 95) {
+                i = i - 80
+                return rounded_rect(1100, (i % 2 == 1 ? (i * 60) - 40 : (i * 60)) + 30, w, h, r, tl, tr, bl, br);
+            } else if (i >= 96 && i <= 103) {
+                i = i - 96
+                return rounded_rect(260, (i % 2 == 1 ? (i * 120) - 100 : (i * 120)) + 90, w, h, r, tl, tr, bl, br);
+            } else if (i >= 104 && i <= 111) {
+                i = i - 104
+                return rounded_rect(980, (i % 2 == 1 ? (i * 120) - 100 : (i * 120)) + 90, w, h, r, tl, tr, bl, br);
+            } else if (i >= 112 && i <= 115) {
+                i = i - 112
+                return rounded_rect(380, (i % 2 == 1 ? (i * 240) - 220: (i * 240)) + 210, w, h, r, tl, tr, bl, br);
+            } else if (i >= 116 && i <= 119) {
+                i = i - 116
+                return rounded_rect(860, (i % 2 == 1 ? (i * 240) - 220: (i * 240)) + 210, w, h, r, tl, tr, bl, br);
+            } else if (i >= 120 && i <= 121) {
+                i = i - 120
+                return rounded_rect(500, (i % 2 == 1 ? (i * 480) - 460: (i * 480)) + 450, w, h, r, tl, tr, bl, br);
+            } else if (i >= 122 && i <= 123) {
+                i = i - 122
+                return rounded_rect(740, (i % 2 == 1 ? (i * 480) - 460: (i * 480)) + 450, w, h, r, tl, tr, bl, br);
+            } else if (i >= 124) {
+                i = i - 124
+                return rounded_rect(620, (i % 2 == 1 ? (i * 480) - 460: (i * 480)) + 450, w, h, r, tl, tr, bl, br);
+            }
+        }
+
+        // https://stackoverflow.com/a/13505624
+        function rounded_rect(x, y, w, h, r, tl, tr, bl, br) {
+            var retval;
+            retval  = "M" + (x + r) + "," + y;
+            retval += "h" + (w - 2*r);
+            if (tr) { retval += "a" + r + "," + r + " 0 0 1 " + r + "," + r; }
+            else { retval += "h" + r; retval += "v" + r; }
+            retval += "v" + (h - 2*r);
+            if (br) { retval += "a" + r + "," + r + " 0 0 1 " + -r + "," + r; }
+            else { retval += "v" + r; retval += "h" + -r; }
+            retval += "h" + (2*r - w);
+            if (bl) { retval += "a" + r + "," + r + " 0 0 1 " + -r + "," + -r; }
+            else { retval += "h" + -r; retval += "v" + -r; }
+            retval += "v" + (2*r - h);
+            if (tl) { retval += "a" + r + "," + r + " 0 0 1 " + r + "," + -r; }
+            else { retval += "v" + -r; retval += "h" + r; }
+            retval += "z";
+            return retval;
+        }
+
+
+
+    </script>
+</body>
+</html>
