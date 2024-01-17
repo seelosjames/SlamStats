@@ -1,0 +1,7 @@
+/
+/bracket
+	/bracket/create
+		/bracket/create/$year/$tournament
+
+	/bracket/view
+		/bracket/view/$id
