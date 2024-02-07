@@ -1,17 +1,14 @@
 import "./App.css";
 import Header from "./Header.js";
-import Bracket from "./Bracket.js"
-import News from "./News.js"
-import Top25 from "./Top25.js"
-import UpcomingGames from "./UpcomingGames.js"
+import Bracket from "./Bracket.js";
+import News from "./News.js";
+import Top25 from "./Top25.js";
+import UpcomingGames from "./UpcomingGames.js";
 
 function App() {
   return (
     <div className="App">
-      <div className="header">
       <Header />
-      </div>
-
       <div className="main-content">
         <div className="left-content">
           <Bracket />
@@ -27,9 +24,7 @@ function App() {
             <UpcomingGames />
           </div>
         </div>
-        
       </div>
-      
     </div>
   );
 }
